@@ -12,9 +12,12 @@ namespace AppServer
     class Listener
     {
         Socket sc;
+        Socket clientSocket;
         IPAddress ipAddress;
         int port;
         StringBuilder logs;
+        List<Task> tasks = new List<Task>();
+        bool stopListener = false;
         public Listener(string ipAddress, int port, StringBuilder logs)
         {
             this.ipAddress = IPAddress.Parse(ipAddress);
@@ -36,36 +39,46 @@ namespace AppServer
             {
                 sc.Bind(endPoint);
                 sc.Listen(10);
+
                 
-                while (true)
+                while (!stopListener)
                 {
-                    Socket asc = sc.Accept();
-                    var buffer = new byte[1024 * 4];
-                    using (var sw = new StreamWriter(new MemoryStream(buffer)))
-                    {
-                        sw.Write("HELLO?");
-                        logs.Append("[Sent] : HELLO?");
-                        logs.Append(Environment.NewLine);
-                    }
+                    clientSocket = sc.Accept(); // Waiting for client connection
 
-                    asc.Send(buffer);
-
-                    while (true)
-                    {
-                        buffer = new byte[1024 * 4];
-                        var bytesRec = asc.Receive(buffer);
-
-                        var text = Encoding.ASCII.GetString(buffer, 0 , bytesRec );
-                        logs.Append("[Received] : " + text);
-                        logs.Append(Environment.NewLine);
-
-                        if (text.IndexOf("<EOF>") > -1)
+                    var action = new Action<object>((socketObject) => {
+                        var asc = (Socket)socketObject;
+                        var buffer = new byte[1024 * 4];
+                        using (var sw = new StreamWriter(new MemoryStream(buffer)))
                         {
-                            break;
+                            logs.Append(Environment.NewLine);
+                            sw.Write("HELLO?");
+                            logs.Append("[Sent] : HELLO?");
+                            logs.Append(Environment.NewLine);
                         }
-                    }
 
+                        asc.Send(buffer);
+
+                        while (true)
+                        {
+                            buffer = new byte[1024 * 4];
+                            var bytesRec = asc.Receive(buffer); // Waiting for connected client's data
+
+                            var text = Encoding.ASCII.GetString(buffer, 0, bytesRec);
+                            logs.Append("[Received] : " + text);
+                            if (text.IndexOf("<EOF>") > -1)
+                            {
+                                logs.Append(Environment.NewLine);
+                                break;
+                            }
+                        }
+                    });
+
+                    Task t = new Task(action, clientSocket);
+                    tasks.Add(t);
+                    t.Start();
                 }
+
+                Task.WaitAll(tasks.ToArray());
             }
             catch (Exception ex)
             {
@@ -75,10 +88,23 @@ namespace AppServer
 
         public void Stop()
         {
-            if (sc.Connected)
+            if (sc != null)
             {
-                sc.Disconnect(true);
+                if (sc.Connected)
+                {
+                    sc.Disconnect(false);
+                }
+                sc.Close();
             }
+            if (clientSocket != null)
+            {
+                if (clientSocket.Connected)
+                {
+                    clientSocket.Disconnect(false);
+                }
+                clientSocket.Close();
+            }
+            stopListener = true;
         }
     }
 }

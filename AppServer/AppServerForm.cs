@@ -26,7 +26,11 @@ namespace AppServer
 
         private void AppServerForm_Load(object sender, EventArgs e)
         {
-            txtIPAddress.Text = IPAddress.Loopback.ToString();
+            var hostIp = Dns.GetHostEntry(string.Empty).AddressList.Where(a => a.AddressFamily == AddressFamily.InterNetwork).FirstOrDefault();
+            if (hostIp != null)
+            {
+                txtIPAddress.Text = hostIp.ToString();
+            }
             cancellationToken = new CancellationToken();
         }
 
@@ -78,6 +82,14 @@ namespace AppServer
         {
             txtLogs.Text += logs.ToString();
             logs.Clear();
+        }
+
+        private void AppServerForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (listener != null)
+            {
+                listener.Stop();
+            }
         }
     }
 }

@@ -44,7 +44,7 @@
             // 
             // btnConnect
             // 
-            this.btnConnect.Location = new System.Drawing.Point(253, 17);
+            this.btnConnect.Location = new System.Drawing.Point(232, 17);
             this.btnConnect.Name = "btnConnect";
             this.btnConnect.Size = new System.Drawing.Size(75, 23);
             this.btnConnect.TabIndex = 0;
@@ -55,14 +55,14 @@
             // txtIPAddress
             // 
             this.txtIPAddress.Enabled = false;
-            this.txtIPAddress.Location = new System.Drawing.Point(27, 19);
+            this.txtIPAddress.Location = new System.Drawing.Point(6, 19);
             this.txtIPAddress.Name = "txtIPAddress";
             this.txtIPAddress.Size = new System.Drawing.Size(107, 20);
             this.txtIPAddress.TabIndex = 1;
             // 
             // txtPort
             // 
-            this.txtPort.Location = new System.Drawing.Point(140, 19);
+            this.txtPort.Location = new System.Drawing.Point(119, 19);
             this.txtPort.Name = "txtPort";
             this.txtPort.Size = new System.Drawing.Size(107, 20);
             this.txtPort.TabIndex = 2;
@@ -76,7 +76,7 @@
             this.groupBox1.Controls.Add(this.btnConnect);
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(438, 59);
+            this.groupBox1.Size = new System.Drawing.Size(543, 59);
             this.groupBox1.TabIndex = 3;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Server";
@@ -84,7 +84,7 @@
             // btnStop
             // 
             this.btnStop.Enabled = false;
-            this.btnStop.Location = new System.Drawing.Point(334, 17);
+            this.btnStop.Location = new System.Drawing.Point(313, 17);
             this.btnStop.Name = "btnStop";
             this.btnStop.Size = new System.Drawing.Size(75, 23);
             this.btnStop.TabIndex = 3;
@@ -98,7 +98,7 @@
             this.txtLogs.Multiline = true;
             this.txtLogs.Name = "txtLogs";
             this.txtLogs.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtLogs.Size = new System.Drawing.Size(438, 171);
+            this.txtLogs.Size = new System.Drawing.Size(543, 171);
             this.txtLogs.TabIndex = 5;
             this.txtLogs.WordWrap = false;
             // 
@@ -110,9 +110,9 @@
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatus});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 242);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 259);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(466, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(567, 22);
             this.statusStrip1.TabIndex = 6;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -125,12 +125,15 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(466, 264);
+            this.ClientSize = new System.Drawing.Size(567, 281);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.txtLogs);
             this.Controls.Add(this.groupBox1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
             this.Name = "AppServerForm";
             this.Text = "Application Server";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.AppServerForm_FormClosing);
             this.Load += new System.EventHandler(this.AppServerForm_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
